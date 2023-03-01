@@ -1,4 +1,4 @@
-package io.nerd.demail;
+package io.nerd.demail.config;
 
 import java.io.File;
 import org.springframework.boot.context.properties.ConfigurationProperties;
