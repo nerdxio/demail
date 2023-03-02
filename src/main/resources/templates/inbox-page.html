@@ -14,12 +14,82 @@
             integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
             crossorigin="anonymous"
     ></script>
+    <style>
+        .container {
+            display: grid;
+
+            grid-template-areas:
+            "header header header"
+            "nav content content"
+            "footer footer footer";
+
+            grid-template-columns: 200px 1fr 200px;
+            grid-template-rows: auto 1fr auto;
+            grid-gap: 10px;
+
+            height: 100vh;
+        }
+
+        header {
+            grid-area: header;
+        }
+
+        nav {
+            grid-area: nav;
+            margin-left: 0.5rem;
+        }
+
+        main {
+            grid-area: content;
+        }
+
+        aside {
+            grid-area: side;
+            margin-right: 0.5rem;
+        }
+
+        footer {
+            grid-area: footer;
+        }
+    </style>
 </head>
 <body>
-    <h1>Inbox</h1>
-    <div
-            th:each="folder : ${folders}">
-        <h1 th:text="${folder.label}"></h1>
-    </div>
-    </body>
+
+<div class="container">
+    <header>
+        <!-- Header content -->
+        <h1>Hello, Name</h1>
+    </header>
+
+    <nav>
+        <div class="card">
+            <div class="card-header">
+                Folders
+            </div>
+            <div class="card-body">
+
+                <ul class="list-group">
+                    <li th:each="folder : ${folders}"
+                        class="list-group-item d-flex justify-content-between align-items-center">
+                        <span th:text="${folder.label}"> Label</span>
+                        <span class="badge bg-primary rounded-pill">14</span>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <!-- Main content -->
+        <p>Email list</p>
+    </main>
+
+    <footer>
+        <!-- Footer content -->
+
+    </footer>
+</div>
+
+
+</body>
 </html>
