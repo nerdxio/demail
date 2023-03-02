@@ -2,6 +2,7 @@ package io.nerd.demail.controller;
 
 import io.nerd.demail.inbox.Folder;
 import io.nerd.demail.inbox.FolderRepository;
+import io.nerd.demail.inbox.FolderService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,22 +20,24 @@ public class InboxController {
     @Autowired
     private FolderRepository folderRepository;
 
+    @Autowired
+    FolderService folderService;
+
     @GetMapping("/")
     public String homePage(@AuthenticationPrincipal OAuth2User principal, Model model) {
-        if (principal != null && principal.getAttribute("login") != null) {
-            String loginId = principal.getAttribute("login");
-            List<Folder> folders = folderRepository.findAllById(loginId);
-            if (folders.size() > 0) {
-                model.addAttribute("folders", folders);
-            } else {
-//                List<Folder> initFolders = InitFolders.init(loginId);
-//                initFolders.stream().forEach(folderRepository::save);
-//                model.addAttribute("folders", initFolders);
-            }
-
-            return "inbox-page";
+        if (principal == null || !StringUtils.hasText(principal.getAttribute("login"))) {
+            return "index";
         }
-        return "index";
+
+
+        String userId = principal.getAttribute("login");
+        List<Folder> userFolders = folderRepository.findAllById(userId);
+        model.addAttribute("userFolders",userFolders);
+
+        List<Folder> defaultFolders = folderRepository.findAllById(userId);
+        model.addAttribute("defaultFolders",defaultFolders);
+
+        return "inbox-page";
     }
 
 }
