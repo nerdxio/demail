@@ -1,18 +1,42 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     <title>Demo</title>
-    <meta name="description" content="" />
-    <meta name="viewport" content="width=device-width" />
-    <base href="/" />
+    <meta name="description" content=""/>
+    <meta name="viewport" content="width=device-width"/>
+    <base href="/"/>
+    <style>
+
+        div {
+            position: fixed; /* position relative to the viewport */
+            top: 50%; /* position from the top of the viewport */
+            left: 50%; /* position from the left of the viewport */
+            transform: translate(-50%, -50%); /* center the element */
+            width: 300px; /* set the width */
+            height: 200px; /* set the height */
+            background-color: #fff; /* set the background color */
+            border-radius: 10px; /* set the border radius */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* set the box shadow */
+            padding: 10px; /* set the padding */
+            border: 1px solid #ccc; /* set the border */
+        }
+
+        div h1 {
+            text-align: center; /* center the text horizontally */
+        }
+        div h4 {
+            text-align: center; /* center the text horizontally */
+        }
+
+    </style>
 </head>
 <body>
-<h1>Login</h1>
-
 <div>
-    With GitHub: <a href="/oauth2/authorization/github">click here</a>
+    <h1>Login</h1>
+    <h4> With GitHub:</h4>
+    <a style="margin-left: 115px" href="/oauth2/authorization/github">click here</a>
 </div>
 </body>
 </html>
