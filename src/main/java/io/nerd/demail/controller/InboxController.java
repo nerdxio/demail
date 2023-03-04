@@ -1,9 +1,12 @@
 package io.nerd.demail.controller;
 
+import com.datastax.oss.driver.api.core.uuid.Uuids;
+import io.nerd.demail.emaillist.EmailListItemRepository;
 import io.nerd.demail.inbox.Folder;
 import io.nerd.demail.inbox.FolderRepository;
 import io.nerd.demail.inbox.FolderService;
 import lombok.extern.slf4j.Slf4j;
+import org.ocpsoft.prettytime.PrettyTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -12,14 +15,17 @@ import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @Slf4j
 public class InboxController {
     @Autowired
     private FolderRepository folderRepository;
-
+    @Autowired
+    private EmailListItemRepository emailListItemRepository;
     @Autowired
     FolderService folderService;
 
@@ -29,14 +35,27 @@ public class InboxController {
             return "index";
         }
 
-
+        //fetch all folders
         String userId = principal.getAttribute("login");
         List<Folder> userFolders = folderRepository.findAllById(userId);
-        model.addAttribute("userFolders",userFolders);
+        model.addAttribute("userFolders", userFolders);
 
         List<Folder> defaultFolders = folderRepository.findAllById(userId);
-        model.addAttribute("defaultFolders",defaultFolders);
+        model.addAttribute("defaultFolders", defaultFolders);
 
+        //fetch all messages
+        String folderLabel = "Inbox";
+        var emailList = emailListItemRepository.findAllByKey_IdAndKey_label(userId, folderLabel);
+
+        PrettyTime p = new PrettyTime();
+        emailList.stream().forEach(item -> {
+                    UUID timeUuid = item.getKey().getTimeUUID();
+                    var emailDataTime = new Date(Uuids.unixTimestamp(timeUuid));
+                    item.setAgoTimeString(p.format(emailDataTime));
+                }
+        );
+
+        model.addAttribute("emailList", emailList);
         return "inbox-page";
     }
 
