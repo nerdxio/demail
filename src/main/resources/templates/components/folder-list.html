@@ -13,7 +13,7 @@
             <ul class="list-group">
                 <li th:each="folder : ${folders}"
                     class="list-group-item d-flex justify-content-between align-items-center">
-                    <span th:text="${folder.label}"> Label</span>
+                    <a th:href="@{'/?folder='+ ${folder.label}}" th:text="${folder.label}"> Label</a>
                     <span class="badge bg-primary rounded-pill">14</span>
                 </li>
             </ul>

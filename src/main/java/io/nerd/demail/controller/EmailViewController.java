@@ -1,11 +1,12 @@
 package io.nerd.demail.controller;
 
 import com.datastax.oss.driver.api.core.uuid.Uuids;
+import io.nerd.demail.email.Email;
+import io.nerd.demail.email.EmailRepository;
 import io.nerd.demail.emaillist.EmailListItemRepository;
 import io.nerd.demail.inbox.Folder;
 import io.nerd.demail.inbox.FolderRepository;
 import io.nerd.demail.inbox.FolderService;
-import lombok.extern.slf4j.Slf4j;
 import org.ocpsoft.prettytime.PrettyTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -14,24 +15,25 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.PathVariable;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Controller
-@Slf4j
-public class InboxController {
+public class EmailViewController {
     @Autowired
     private FolderRepository folderRepository;
     @Autowired
-    private EmailListItemRepository emailListItemRepository;
+    private EmailRepository emailRepository;
     @Autowired
     FolderService folderService;
 
-    @GetMapping("/")
-    public String homePage(@RequestParam(required = false)String folder, @AuthenticationPrincipal OAuth2User principal, Model model) {
+    @GetMapping("/emails/{id}")
+    public String emailView(@PathVariable UUID id, @AuthenticationPrincipal OAuth2User principal, Model model) {
+
         if (principal == null || !StringUtils.hasText(principal.getAttribute("login"))) {
             return "index";
         }
@@ -44,23 +46,14 @@ public class InboxController {
         List<Folder> defaultFolders = folderRepository.findAllById(userId);
         model.addAttribute("defaultFolders", defaultFolders);
 
-        //fetch all messages
-        if (!StringUtils.hasText(folder)){
-            folder ="Inbox";
+        Optional<Email> optionalEmail = emailRepository.findById(id);
+        if (optionalEmail.isEmpty()) {
+            return "inbox-page";
         }
-        var emailList = emailListItemRepository.findAllByKey_IdAndKey_label(userId, folder);
-
-        PrettyTime p = new PrettyTime();
-        emailList.stream().forEach(item -> {
-                    UUID timeUuid = item.getKey().getTimeUUID();
-                    var emailDataTime = new Date(Uuids.unixTimestamp(timeUuid));
-                    item.setAgoTimeString(p.format(emailDataTime));
-                }
-        );
-
-        model.addAttribute("emailList", emailList);
-        model.addAttribute("folderName", folder);
-        return "inbox-page";
+        var email = optionalEmail.get();
+        var toIds = String.join(",", email.getTo());
+        model.addAttribute("email", email);
+        model.addAttribute("toIds", toIds);
+        return "email-page";
     }
-
 }

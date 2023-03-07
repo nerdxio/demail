@@ -1,3 +1,4 @@
+
 spring:
   security:
     oauth2:
@@ -26,3 +27,5 @@ astra.db:
 
 datastax.astra:
   secure-connect-bundle: secure-connect.zip
+server:
+  port: 8100

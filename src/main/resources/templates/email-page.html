@@ -60,7 +60,6 @@
         <!-- Header content -->
         <h1>Hello, Name</h1>
     </header>
-
     <nav>
         <div th:insert="components/folder-list :: folder-list (pabelName = 'Folders',folders=${defaultFolders})"></div>
         <div th:insert="components/folder-list :: folder-list (pabelName = 'User Folders',folders=${userFolders})"></div>
@@ -68,30 +67,23 @@
 
     <main>
         <!-- Main content -->
-        <div class="card" th:if="${emailList}">
-            <div class="card-header" th:text="${folderName}">Inbox</div>
-            <div class="card-body">
-                <div class="list-group">
-                    <a th:each="message : ${emailList}"
-                       th:href="@{'/emails/' + ${message.key.timeUUID}}" class="list-group-item list-group-item-action">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1" th:text="${message.subject}">List group item heading</h5>
-                            <small th:text="${message.agoTimeString}">3 days ago</small>
-                        </div>
-                        <p class="mb-1" th:text="${message.to}">Some placeholder content in a paragraph.</p>
-                    </a>
-
-                </div>
-            </div>
-
+        <div class="card">
+            <div class="card-header">View Email</div>
+            <dl class="card-body">
+                <dt>From</dt>
+                <dd th:text="${email.from}"></dd>
+                <dt>To</dt>
+                <dd th:text="${toIds}"></dd>
+                <dt>Subject</dt>
+                <dd th:text="${email.subject}"></dd>
+                <dt>Body</dt>
+                <dd th:text="${email.body}"></dd>
+            </dl>
+        </div>
     </main>
-
     <footer>
         <!-- Footer content -->
-
     </footer>
 </div>
-
-
 </body>
 </html>

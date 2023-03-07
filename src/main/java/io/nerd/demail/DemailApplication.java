@@ -2,6 +2,8 @@ package io.nerd.demail;
 
 import com.datastax.oss.driver.api.core.uuid.Uuids;
 import io.nerd.demail.config.DataStaxAstraProperties;
+import io.nerd.demail.email.Email;
+import io.nerd.demail.email.EmailRepository;
 import io.nerd.demail.emaillist.EmailListItem;
 import io.nerd.demail.emaillist.EmailListItemKey;
 import io.nerd.demail.emaillist.EmailListItemRepository;
@@ -28,6 +30,8 @@ public class DemailApplication {
     @Autowired
     EmailListItemRepository emailListItemRepository;
 
+    @Autowired
+    EmailRepository emailRepository;
     public static void main(String[] args) {
         SpringApplication.run(DemailApplication.class, args);
     }
@@ -51,10 +55,19 @@ public class DemailApplication {
 
             EmailListItem item = new EmailListItem();
             item.setKey(key);
-            item.setTo(List.of("hassanrefaat9"));
+            item.setTo(List.of("hassanrefaat9","abc","cdf"));
             item.setSubject("Subject "+i);
             item.setUnread(true);
-             emailListItemRepository.save(item);
+            emailListItemRepository.save(item);
+
+            var email = new Email();
+            email.setId(key.getTimeUUID());
+            email.setFrom("hassanrefaat9");
+            email.setSubject(item.getSubject());
+            email.setBody("Body "+i);
+            email.setTo(item.getTo());
+
+            emailRepository.save(email);
         }
     }
 }
