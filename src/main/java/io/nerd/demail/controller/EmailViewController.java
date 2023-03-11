@@ -1,13 +1,10 @@
 package io.nerd.demail.controller;
 
-import com.datastax.oss.driver.api.core.uuid.Uuids;
 import io.nerd.demail.email.Email;
 import io.nerd.demail.email.EmailRepository;
-import io.nerd.demail.emaillist.EmailListItemRepository;
-import io.nerd.demail.inbox.Folder;
-import io.nerd.demail.inbox.FolderRepository;
-import io.nerd.demail.inbox.FolderService;
-import org.ocpsoft.prettytime.PrettyTime;
+import io.nerd.demail.folder.Folder;
+import io.nerd.demail.folder.FolderRepository;
+import io.nerd.demail.folder.FolderService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -17,7 +14,6 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

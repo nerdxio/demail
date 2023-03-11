@@ -7,8 +7,10 @@ import io.nerd.demail.email.EmailRepository;
 import io.nerd.demail.emaillist.EmailListItem;
 import io.nerd.demail.emaillist.EmailListItemKey;
 import io.nerd.demail.emaillist.EmailListItemRepository;
-import io.nerd.demail.inbox.Folder;
-import io.nerd.demail.inbox.FolderRepository;
+import io.nerd.demail.folder.Folder;
+import io.nerd.demail.folder.FolderRepository;
+import io.nerd.demail.folder.UnreadEmailStatsRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,7 +20,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.List;
 
 @SpringBootApplication
@@ -29,9 +30,11 @@ public class DemailApplication {
     FolderRepository folderRepository;
     @Autowired
     EmailListItemRepository emailListItemRepository;
-
     @Autowired
     EmailRepository emailRepository;
+    @Autowired
+    UnreadEmailStatsRepository unreadEmailStatsRepository;
+
     public static void main(String[] args) {
         SpringApplication.run(DemailApplication.class, args);
     }
@@ -41,22 +44,26 @@ public class DemailApplication {
         Path bundle = astraProperties.getSecureConnectBundle().toPath();
         return builder -> builder.withCloudSecureConnectBundle(bundle);
     }
-    @PostConstruct
-    public void init(){
-        folderRepository.save( new Folder("hassanrefaat9","Inbox","blue"));
-        folderRepository.save( new Folder("hassanrefaat9","Sent","green"));
-        folderRepository.save( new Folder("hassanrefaat9","Important","red"));
 
+    @PostConstruct
+    public void init() {
+        folderRepository.save(new Folder("hassanrefaat9", "Inbox", "blue"));
+        folderRepository.save(new Folder("hassanrefaat9", "Sent", "green"));
+        folderRepository.save(new Folder("hassanrefaat9", "Important", "red"));
+
+        unreadEmailStatsRepository.incrementUnreadCount("hassanrefaat9", "Inbox");
+        unreadEmailStatsRepository.incrementUnreadCount("hassanrefaat9", "Inbox");
+        unreadEmailStatsRepository.incrementUnreadCount("hassanrefaat9", "Inbox");
         for (int i = 0; i < 10; i++) {
-            EmailListItemKey key =new EmailListItemKey();
+            EmailListItemKey key = new EmailListItemKey();
             key.setId("hassanrefaat9");
             key.setLabel("Inbox");
             key.setTimeUUID(Uuids.timeBased());
 
             EmailListItem item = new EmailListItem();
             item.setKey(key);
-            item.setTo(List.of("hassanrefaat9","abc","cdf"));
-            item.setSubject("Subject "+i);
+            item.setTo(List.of("hassanrefaat9", "abc", "cdf"));
+            item.setSubject("Subject " + i);
             item.setUnread(true);
             emailListItemRepository.save(item);
 
@@ -64,7 +71,7 @@ public class DemailApplication {
             email.setId(key.getTimeUUID());
             email.setFrom("hassanrefaat9");
             email.setSubject(item.getSubject());
-            email.setBody("Body "+i);
+            email.setBody("Body " + i);
             email.setTo(item.getTo());
 
             emailRepository.save(email);

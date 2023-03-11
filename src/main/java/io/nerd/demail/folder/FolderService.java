@@ -1,4 +1,4 @@
-package io.nerd.demail.inbox;
+package io.nerd.demail.folder;
 
 import org.springframework.stereotype.Service;
 

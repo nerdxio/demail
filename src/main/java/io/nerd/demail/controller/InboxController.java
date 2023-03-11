@@ -2,9 +2,9 @@ package io.nerd.demail.controller;
 
 import com.datastax.oss.driver.api.core.uuid.Uuids;
 import io.nerd.demail.emaillist.EmailListItemRepository;
-import io.nerd.demail.inbox.Folder;
-import io.nerd.demail.inbox.FolderRepository;
-import io.nerd.demail.inbox.FolderService;
+import io.nerd.demail.folder.Folder;
+import io.nerd.demail.folder.FolderRepository;
+import io.nerd.demail.folder.FolderService;
 import lombok.extern.slf4j.Slf4j;
 import org.ocpsoft.prettytime.PrettyTime;
 import org.springframework.beans.factory.annotation.Autowired;
