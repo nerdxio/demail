@@ -34,7 +34,7 @@ public class ComposeController {
         List<Folder> userFolders = folderRepository.findAllById(userId);
         model.addAttribute("userFolders", userFolders);
 
-        List<Folder> defaultFolders = folderRepository.findAllById(userId);
+        List<Folder> defaultFolders = folderService.fetchDefaultFolder(userId);
         model.addAttribute("defaultFolders", defaultFolders);
 
         if (StringUtils.hasText(to)) {

@@ -2,9 +2,7 @@ package io.nerd.demail.controller;
 
 import com.datastax.oss.driver.api.core.uuid.Uuids;
 import io.nerd.demail.emaillist.EmailListItemRepository;
-import io.nerd.demail.folder.Folder;
-import io.nerd.demail.folder.FolderRepository;
-import io.nerd.demail.folder.FolderService;
+import io.nerd.demail.folder.*;
 import lombok.extern.slf4j.Slf4j;
 import org.ocpsoft.prettytime.PrettyTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Controller
 @Slf4j
@@ -31,7 +30,7 @@ public class InboxController {
     FolderService folderService;
 
     @GetMapping("/")
-    public String homePage(@RequestParam(required = false)String folder, @AuthenticationPrincipal OAuth2User principal, Model model) {
+    public String homePage(@RequestParam(required = false) String folder, @AuthenticationPrincipal OAuth2User principal, Model model) {
         if (principal == null || !StringUtils.hasText(principal.getAttribute("login"))) {
             return "index";
         }
@@ -41,12 +40,14 @@ public class InboxController {
         List<Folder> userFolders = folderRepository.findAllById(userId);
         model.addAttribute("userFolders", userFolders);
 
-        List<Folder> defaultFolders = folderRepository.findAllById(userId);
+        List<Folder> defaultFolders = folderService.fetchDefaultFolder(userId);
         model.addAttribute("defaultFolders", defaultFolders);
 
+        model.addAttribute("stats", folderService.mapCountToLabel(userId));
+
         //fetch all messages
-        if (!StringUtils.hasText(folder)){
-            folder ="Inbox";
+        if (!StringUtils.hasText(folder)) {
+            folder = "Inbox";
         }
         var emailList = emailListItemRepository.findAllByKey_IdAndKey_label(userId, folder);
 

@@ -4,6 +4,7 @@ import com.datastax.oss.driver.api.core.uuid.Uuids;
 import io.nerd.demail.config.DataStaxAstraProperties;
 import io.nerd.demail.email.Email;
 import io.nerd.demail.email.EmailRepository;
+import io.nerd.demail.email.EmailService;
 import io.nerd.demail.emaillist.EmailListItem;
 import io.nerd.demail.emaillist.EmailListItemKey;
 import io.nerd.demail.emaillist.EmailListItemRepository;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.PostConstruct;
 import java.nio.file.Path;
+import java.util.Arrays;
 import java.util.List;
 
 @SpringBootApplication
@@ -29,11 +31,7 @@ public class DemailApplication {
     @Autowired
     FolderRepository folderRepository;
     @Autowired
-    EmailListItemRepository emailListItemRepository;
-    @Autowired
-    EmailRepository emailRepository;
-    @Autowired
-    UnreadEmailStatsRepository unreadEmailStatsRepository;
+    EmailService emailService;
 
     public static void main(String[] args) {
         SpringApplication.run(DemailApplication.class, args);
@@ -47,34 +45,14 @@ public class DemailApplication {
 
     @PostConstruct
     public void init() {
-        folderRepository.save(new Folder("hassanrefaat9", "Inbox", "blue"));
-        folderRepository.save(new Folder("hassanrefaat9", "Sent", "green"));
-        folderRepository.save(new Folder("hassanrefaat9", "Important", "red"));
+        folderRepository.save(new Folder("hassanrefaat9", "Work", "blue"));
+        folderRepository.save(new Folder("hassanrefaat9", "Home", "green"));
+        folderRepository.save(new Folder("hassanrefaat9", "Family", "red"));
 
-        unreadEmailStatsRepository.incrementUnreadCount("hassanrefaat9", "Inbox");
-        unreadEmailStatsRepository.incrementUnreadCount("hassanrefaat9", "Inbox");
-        unreadEmailStatsRepository.incrementUnreadCount("hassanrefaat9", "Inbox");
+
         for (int i = 0; i < 10; i++) {
-            EmailListItemKey key = new EmailListItemKey();
-            key.setId("hassanrefaat9");
-            key.setLabel("Inbox");
-            key.setTimeUUID(Uuids.timeBased());
+            emailService.sendEmail("hassanrefaat9", Arrays.asList("hassanrefaat9","abc"),"Hello "+i ,"Body");
 
-            EmailListItem item = new EmailListItem();
-            item.setKey(key);
-            item.setTo(List.of("hassanrefaat9", "abc", "cdf"));
-            item.setSubject("Subject " + i);
-            item.setUnread(true);
-            emailListItemRepository.save(item);
-
-            var email = new Email();
-            email.setId(key.getTimeUUID());
-            email.setFrom("hassanrefaat9");
-            email.setSubject(item.getSubject());
-            email.setBody("Body " + i);
-            email.setTo(item.getTo());
-
-            emailRepository.save(email);
         }
     }
 }
