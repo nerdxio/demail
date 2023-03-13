@@ -33,7 +33,7 @@ public class ComposeController {
         String userId = principal.getAttribute("login");
         List<Folder> userFolders = folderRepository.findAllById(userId);
         model.addAttribute("userFolders", userFolders);
-
+        model.addAttribute("stats",folderService.mapCountToLabel(userId));
         List<Folder> defaultFolders = folderService.fetchDefaultFolder(userId);
         model.addAttribute("defaultFolders", defaultFolders);
 
