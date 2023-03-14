@@ -70,19 +70,20 @@
         <div class="card">
             <div class="card-header">Create New Email</div>
             <dl class="card-body">
-                <form>
+                <form th:attr="action=@{/sendEmail}" method="post">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
                     <div class="mb-3">
                         <label for="toIds" class="form-label">To</label>
-                        <input type="text" th:value="${toIds}" class="form-control" id="toIds" aria-describedby="emailHelp">
+                        <input type="text" th:value="${toIds}" class="form-control" name="toIds" id="toIds" aria-describedby="emailHelp">
                         <div id="toIdHelp" class="form-text">Enter comma seperated GitHub IDS of your recipients</div>
                     </div>
                     <div class="mb-3">
                         <label for="subject" class="form-label">Subject</label>
-                        <input type="text" class="form-control" id="subject">
+                        <input type="text" class="form-control" name="subject" id="subject">
                     </div>
                     <div class="mb-3">
                         <label for="body" class="form-label">Body</label>
-                        <textarea rows="10" type="text" class="form-control" id="body"> </textarea>
+                        <textarea rows="10" type="text" class="form-control" name="body" id="body"> </textarea>
                     </div>
                     <button type="submit" class="btn btn-primary">Submit</button>
                 </form>

@@ -44,7 +44,7 @@ public class EmailService {
             emailsListItemRepository.save(item);
             unreadEmailStatsRepository.incrementUnreadCount(toId,"Inbox");
         });
-        EmailListItem sendItemsEntry = createEmailListItem(to, subject, email, from, "Sent Items");
+        EmailListItem sendItemsEntry = createEmailListItem(to, subject, email, from, "Send");
         sendItemsEntry.setUnread(false);
         emailsListItemRepository.save(sendItemsEntry);
     }
