@@ -81,12 +81,14 @@
             <div class="card-body">
                 <div class="list-group">
                     <a th:each="message : ${emailList}"
-                       th:href="@{'/emails/' + ${message.key.timeUUID}}" class="list-group-item list-group-item-action">
+                       th:href="@{'/emails/' + ${message.key.timeUUID}} + '?folder=' +${folderName}"
+                       class="list-group-item list-group-item-action"
+                         th:classappend="${message.isUnread} ? 'list-group-item-primary'">
                         <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-1" th:text="${message.subject}">List group item heading</h5>
+                            <h5 class="mb-1" th:text="${message.subject}">Subject</h5>
                             <small th:text="${message.agoTimeString}">3 days ago</small>
                         </div>
-                        <p class="mb-1" th:text="${message.to}">Some placeholder content in a paragraph.</p>
+                        <p class="mb-1" th:text="${message.to}">Abc, Def</p>
                     </a>
 
                 </div>

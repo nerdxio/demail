@@ -14,7 +14,6 @@ import java.util.UUID;
 @Table(value = "messages_by_id")
 @Getter
 @Setter
-
 public class Email {
 
     @Id
