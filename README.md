@@ -2,7 +2,10 @@
 
 ### Project Preview 
 
-Uploading Untitled video - Made with Clipchamp.mp4…
+
+
+https://user-images.githubusercontent.com/76957887/226035953-f2eef3bf-8a71-4513-9e88-e31a04d09747.mp4
+
 
 
 ### Functional Requirement
