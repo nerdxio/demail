@@ -1,5 +1,8 @@
 # demail
 
+Demail is an email application that allows you to send and receive messages.
+
+
 ### Project Preview 
 
 
