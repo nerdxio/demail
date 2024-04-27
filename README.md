@@ -1,6 +1,6 @@
 # demail
 
-Demail is an email application that allows you to send and receive messages.
+Demail is a simple email application with features for composing, sending, viewing, and organizing messages into folders. It includes functions like reply, reply all, and viewing single messages.
 
 
 ### Project Preview 
